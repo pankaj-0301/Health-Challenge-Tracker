@@ -39,13 +39,13 @@ Health Challenge Tracker is an Angular application for managing and visualizing 
 Visit http://localhost:4200.
 
 
-#Future Enhancements
+## Future Enhancements
 Advanced Analytics: More detailed workout analysis.
 UI/UX Improvements: Enhanced interface and features.
 Enhanced Reporting: Additional reporting tools.
 
 
-#Assumptions
+## Assumptions
 User data and workout information are consistent.
 Charts display data based on the selected user.
 
