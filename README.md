@@ -41,12 +41,15 @@ Visit http://localhost:4200.
 
 ## Future Enhancements
 Advanced Analytics: More detailed workout analysis.
+
 UI/UX Improvements: Enhanced interface and features.
+
 Enhanced Reporting: Additional reporting tools.
 
 
 ## Assumptions
 User data and workout information are consistent.
+
 Charts display data based on the selected user.
 
 
