@@ -1,0 +1,115 @@
+
+<div class="p-6 max-w-6xl mx-auto">
+  <!-- Search and Filter Section -->
+  <div class="mb-6 flex flex-col md:flex-row items-center justify-between gap-4">
+    <input 
+      [(ngModel)]="searchName" 
+      (input)="onSearch()" 
+      placeholder="Search by name"
+      class="p-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+    />
+    <div class="flex items-center gap-4">
+      <select 
+        [(ngModel)]="filterWorkoutType" 
+        (change)="onFilter()" 
+        class="p-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <option value="">Filter by workout type</option>
+        <option *ngFor="let type of workoutTypes" [value]="type">{{ type }}</option>
+      </select>
+      <button 
+        (click)="resetFilters()" 
+        class="p-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 transition"
+      >
+        Reset Filters
+      </button>
+      <button 
+        (click)="showGraphAnalysis()" 
+        class="p-2 bg-green-500 text-white rounded shadow hover:bg-green-600 transition"
+      >
+        Show Graph Analysis
+      </button>
+    </div>
+  </div>
+
+  <!-- Workout List Table -->
+  <div class="overflow-x-auto mt-6">
+    <table class="m-w-full bg-white border border-gray-300 shadow-md rounded-lg">
+      <thead class="bg-gray-100 border-b border-gray-300">
+        <tr>
+          <th class="p-3 text-left">Name</th>
+          <th class="p-3 text-left">Workouts</th>
+          <th class="p-3 text-left">Number of Workouts</th>
+          <th class="p-3 text-left">Total Workout Minutes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of paginatedUsers" class="border-b border-gray-200">
+          <td class="p-3">{{ user.name }}</td>
+          <td class="p-3">
+            <ul class="list-disc list-inside space-y-1">
+              <li *ngFor="let workout of user.workouts">
+                {{ workout.type }} - {{ workout.minutes }} min
+              </li>
+            </ul>
+          </td>
+          <td class="p-3">{{ user.workouts.length }}</td>
+          <td class="p-3">{{ getTotalMinutes(user.workouts) }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination Controls -->
+  <div *ngIf="totalPages > 1" class="mt-6 flex items-center justify-between">
+    <button 
+      (click)="prevPage()" 
+      [disabled]="currentPage === 1" 
+      class="p-2 bg-gray-300 text-gray-700 rounded shadow-sm disabled:opacity-50"
+    >
+      Previous
+    </button>
+    <span class="text-gray-700">Page {{ currentPage }} of {{ totalPages }}</span>
+    <button 
+      (click)="nextPage()" 
+      [disabled]="currentPage === totalPages" 
+      class="p-2 bg-gray-300 text-gray-700 rounded shadow-sm disabled:opacity-50"
+    >
+      Next
+    </button>
+  </div>
+
+  <!-- Workout Graph Section -->
+<div class="mt-6" #graphSection>
+    <h3 class="text-lg font-semibold mb-4">Workout Graph</h3>
+    <p class=" text-blue-700">May take some time to load the graph...</p>
+    <div class="flex flex-col md:flex-row gap-6">
+      <!-- User List for Graph Selection -->
+      <div class="md:w-1/4 bg-gray-100 p-4 rounded shadow-md">
+        <h4 class="text-md font-semibold mb-4">Select User</h4>
+        <ul>
+          <li 
+            *ngFor="let user of filteredUsers" 
+            (click)="selectUser(user)" 
+            [ngClass]="{'bg-blue-300': selectedUser && selectedUser.id === user.id}" 
+            class="cursor-pointer p-2 rounded hover:bg-blue-50 transition"
+          >
+            {{ user.name }}
+          </li>
+        </ul>
+      </div>
+  
+      <!-- Graph Display -->
+      <div class="md:w-3/4 p-4">
+        <div *ngIf="selectedUser">
+          <h4 class="text-md font-semibold mb-2">{{ selectedUser.name }}'s Workouts</h4>
+          <div *ngIf="selectedUser.workouts.length > 0">
+            <canvas id="userGraph" width="400" height="400"></canvas>
+          </div>
+          <p *ngIf="selectedUser.workouts.length === 0">No workouts available for this user.</p>
+        </div>
+        <p *ngIf="!selectedUser">Please select a user to see the graph.</p>
+      </div>
+    </div>
+  </div>
+  
